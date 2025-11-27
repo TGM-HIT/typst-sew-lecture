@@ -1,8 +1,9 @@
 #import "template.typ" as template: *
-#import "/src/lib.typ" as PACKAGE
+#import "/src/lib.typ" as tgm-hit-sew-lecture
 
 #show: manual(
   package-meta: toml("/typst.toml").package,
+  title: [TGM-HIT SEW Lecture],
   date: none,
   // date: datetime(year: ..., month: ..., day: ...),
 
@@ -11,7 +12,7 @@
   //   A PACKAGE for something
   // ],
 
-  scope: (PACKAGE: PACKAGE),
+  scope: (tgm-hit-sew-lecture: tgm-hit-sew-lecture),
 )
 
 = Introduction
@@ -22,6 +23,6 @@ This is a PACKAGE for something.
 
 #module(
   read("/src/lib.typ"),
-  name: "PACKAGE",
+  name: "tgm-hit-sew-lecture",
   label-prefix: none,
 )

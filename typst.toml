@@ -1,19 +1,19 @@
 # for a description of available keys, see https://github.com/typst/packages/?tab=readme-ov-file#package-format
 
 [package]
-name = "PACKAGE"
+name = "tgm-hit-sew-lecture"
 version = "0.0.1"
 entrypoint = "src/lib.typ"
 authors = [
   "Clemens Koza <https://github.com/SillyFreak/>"
 ]
 license = "MIT"
-description = "my package"
+description = "Typst template for lecture documents (\"Skripten\"), focused on software engineering"
 # homepage = ""
-repository = "https://github.com/SillyFreak/typst-PACKAGE"
-keywords = []
-categories = []
-disciplines = []
+repository = "https://github.com/TGM-HIT/typst-sew-lecture"
+keywords = ["TGM", "HIT", "HTL", "school", "teaching"]
+categories = ["office"]
+disciplines = ["computer-science", "education"]
 # compiler = ""
 exclude = [
   ".github",
@@ -23,14 +23,12 @@ exclude = [
   "tests",
   ".typstignore",
   "Justfile",
-  "thumbnail-dark.svg",
-  "thumbnail-light.svg",
 ]
 
-# [template]
-# path = "template"
-# entrypoint = "main.typ"
-# thumbnail = "thumbnail.png"
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"
 
 # [tool.mytool]
 # foo = "bar"
