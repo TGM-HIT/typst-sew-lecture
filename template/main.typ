@@ -1,3 +1,206 @@
 #import "@preview/tgm-hit-sew-lecture:0.0.1": *
 
-Hello World
+// #set text(lang: "de")
+#set document(
+  title: [Template for SEW lecture documents],
+  author: "Clemens Koza",
+  // you may keep a log of published versions here
+  // 2025-11-28: template created
+  date: datetime(year: 2025, month: 11, day: 28),
+)
+
+#show: template(
+  header-left: [SEW X. Jahrgang],
+  header-center: [Template],
+  footer-right: [TGM-HIT],
+  license: licenses.cc-by-4-0,
+)
+
+// the bibliography is not shown, but you can cite from it (chicago-notes is a footnote style)
+#bibliography("bibliography.bib")
+
+#title()
+
+#place(hide(footnote(numbering: "*")[Based on earlier work by Jane Doe (comment out otherwise)]))
+#counter(footnote).update(i => i - 1)
+
+This template is intended to simplify crafting well-presented learning resources for our software engineering students.
+The examples here are meant to be read along with the document's source code, e.g. in the web app or using Tinymist's preview.
+Typst code snippets will only be presented in rare circumstances.
+
+I recommend using semantic line breaks when writing, since it makes versioning easier:
+
+#quote(block: true)[
+  When writing text with a compatible markup language, add a line break after each substantial unit of thought.
+  #footnote[https://github.com/sembr/specification]
+]
+
+= Attention
+
+Among the tools in this template is the `colorbox`, an opinionated wrapper around `showybox`#footnote[https://typst.app/universe/package/showybox].
+You can pass a named `color: ...` argument (which sets all relevant showybox colors), as well as all arguments accepted by showybox itself, to customize it.
+
+#colorbox[
+  Color boxes are great to *summarize* and *focus attention* on key concepts.
+]
+
+I don't prescribe a color philosophy, but red is useful to call out Don'ts, e.g.:
+
+#colorbox(color: red)[
+  *Don't overdo* color boxes.
+  In moderation, interrupting the text helps keep attention, but:
+  *if everything is highlighted, nothing is!*
+]
+
+I like to add *emphasis* so that the bold parts form a *shortened message* on their own;
+useful for getting points across even when students only *skim* the document.
+
+= Code
+
+Code snippets are highlighted using `zebraw`#footnote[https://typst.app/universe/package/zebraw], with a bit of styling applied.
+You can also select a subset of lines, as these two examples show:
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 1em,
+  ```java
+  public class Main {
+    public static void main(String[] args){
+      System.out.println("Hello World!");
+    }
+  }
+  ```,
+  {
+    show: zebraw.with(line-range: lines("2-4"))
+    ```java
+    public class Main {
+      public static void main(String[] args){
+        System.out.println("Hello World!");
+      }
+    }
+    ```
+  },
+)
+
+`zebraw` specifies ranges in $["lower", "upper")$ form (i.e. half-open as usual in programming).
+To make this a bit more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple disjoint ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
+Only strings like `"2-4"` will work for now.
+
+== Notes in code
+
+This template adds some handling for putting notes onto code, powered by `pinit`#footnote[https://typst.app/universe/package/pinit]:
+write `PINn` somewhere (replacing `n` by a number), and it will form an anchor for your notes.
+You should just take care of two things:
+
+- notes must appear on the same page as the anchors, so wrapping the code block in `block(breakable: false)` is recommended, and
+- the `PINn` is part of the code when syntax highlighting happens, so avoid making it part of another token:
+  ```java int foo;``` and ```java intPIN1 PIN2foo;``` look differently.
+
+#block(breakable: false, {
+  ```java
+  public class Main {PIN1
+    public static void main(String[] args) {PIN2
+      System.out.println("Hello World!");PIN3
+    }
+
+    intPIN4 PIN5foo;
+  }
+  ```
+
+  pinit-code-from(1)[Boring]
+  pinit-code-from(2)[Boilerplate]
+  pinit-code-from(3)[What it's all about]
+  pinit-code-from(4, pin: (0.5, -0.4), offset: (5, -1))[not great: not a keyword]
+  pinit-code-from(5, pin: (0.5, 0.4), offset: (4, 1))[This color is used for upper-case identifiers (e.g. constants)]
+})
+
+The `pin-code-from` function works a bit differently from `pinit`'s `pinit-point-from`, in that its `pin` etc. parameters accept a pair of _numbers_ instead of there being separate `pin-dx` and `pin-dy` numbers accepting _lengths_.
+The distances are specified in terms of the monospace font grid: 1 in x direction is equal 4.7pt, for example.
+
+= Wrapping text around figures
+
+This is not really a feature of this template, just a tutorial on using `meander`#footnote[https://typst.app/universe/package/meander] for what I found useful in my documents.
+
+
+#meander.reflow(placement: box, {
+  import meander: *
+
+  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 4mm), block(width: 30%)[
+    #figure(
+      rect(),
+      caption: [A rectangle. The figure caption wraps thanks to the fixed width.]
+    ) <fig:rect>
+  ])
+
+  container()
+
+  content[
+    The default mode of Meander is managing a whole page; I found myself usually wanting to manage small groups of paragraphs that contain a figure---like @fig:rect.
+    To do so, use `placement: box` when calling `meander.reflow()`.
+    This will cause Meander to actually reserve the necessary space, so that subsequent regular layout only continues after Meander's content (this is not necessary when Meander manages a whole page anyway).
+  ]
+})
+
+Another useful parameter is `placed(boundary: contour.margin(..), ..)`.
+The `boundary` defines how text should avoid the placed figure, and `contour.margin()` is a simple such boundary that adds a bit of space around your figure.
+Finally, I like to put my figures into fixed-width `block()`s.
+It means that the text may be slightly narrower than necessary to fit the figure, but it makes the layout more robust when writing long figure captions.
+
+== Wrapping text over pagebreaks
+
+One final trick with `meander` is using multiple containers when the wrapping content overflows a page.
+Here's an example of that:
+
+#meander.reflow(placement: box, {
+  import meander: *
+
+  container(height: 1.5cm)
+  pagebreak()
+
+  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 3mm), block(width: 30%)[
+    #figure(
+      rect(),
+      caption: [Another rectangle, at the to of the page.]
+    ) <fig:rect2>
+  ])
+
+  container()
+
+  content[
+    A paragraph starts on this page.
+    It is pretty long, infact so long that it goes on until the next page.
+    _#lorem(40)_
+
+    We also want @fig:rect2 to wrap around that paragraph, appearing at the top of the new page.
+    We can't just _not_ make the first paragraph part of the `meander.reflow()` call, since then the figure wouldn't be at the top of the page, but we also can't have all content in a single Meander `container()`.
+
+    However, meander allows multiple containers with explicit pagebreaks in between, and the content will flow between these!
+    It's not fully automatic---you have to specify the height of the first container, i.e. how much space is left on the page---but it can achieve this layout.
+  ]
+})
+
+= License
+
+The `licenses` dictionary contains links to various creative commons licenses, displayed as the corresponding icon (powered by `ccicons`#footnote[https://typst.app/universe/package/ccicons]): #licenses.cc-by-sa-4-0 or #licenses.cc-zero-1-0.
+If you want to specify a license, you would usually use it when calling the template, then it will be shown in the footer by default.
+
+This document itself is CC-BY, but under normal circumstances (replacing the text with your own material) that license will not apply to you.
+The scaffolding alone (calling `set document()` etc.) is too trivial to entail copyright.
+
+= Header and footer customization
+
+Both header and footer are divided into three equal-width parts; some of them have default values:
+
+- header center: defaults to the document title
+- header right: defaults to a date-based version number
+- footer left: defaults to a copyright note including author, year and license
+- footer center: defaults to the page number
+- the other two are empty
+
+The template further overrides these defaults:
+
+- header left: a course/audience description
+- header center: a short version of the title
+- footer right: the institution's name
+
+You are of course free to use any other header/footer content you like.

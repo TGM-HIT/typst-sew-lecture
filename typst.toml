@@ -14,7 +14,7 @@ repository = "https://github.com/TGM-HIT/typst-sew-lecture"
 keywords = ["TGM", "HIT", "HTL", "school", "teaching"]
 categories = ["office"]
 disciplines = ["computer-science", "education"]
-# compiler = ""
+compiler = "0.14.0"
 exclude = [
   ".github",
   "docs",
