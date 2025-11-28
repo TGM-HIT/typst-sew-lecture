@@ -109,23 +109,27 @@ You should just take care of two things:
 
   pinit-code-from(1)[Boring]
   pinit-code-from(2)[Boilerplate]
-  pinit-code-from(3)[What it's all about]
-  pinit-code-from(4, pin: (0.5, -0.4), offset: (5, -1))[not great: not a keyword]
-  pinit-code-from(5, pin: (0.5, 0.4), offset: (4, 1))[This color is used for upper-case identifiers (e.g. constants)]
+  pinit-code-from(3, color: green.darken(20%), width: 45%)[
+    What it's all about
+    (if your note is longer than a line, you can specify a `width` to avoid overflowing the page!)
+  ]
+  pinit-code-from(4, color: red.darken(20%), pin: (-1, -0.1, top+right), offset: (5, -1, left))[not great: not a keyword]
+  pinit-code-from(5, color: red.darken(20%), pin: (1, 0.1, bottom+right), offset: (4, 1, left))[This color is used for upper-case identifiers (e.g. constants)---also wrong!]
 })
 
 The `pin-code-from` function works a bit differently from `pinit`'s `pinit-point-from`, in that its `pin` etc. parameters accept a pair of _numbers_ instead of there being separate `pin-dx` and `pin-dy` numbers accepting _lengths_.
-The distances are specified in terms of the monospace font grid: 1 in x direction is equal 4.7pt, for example.
+The distances are specified in terms of the monospace font grid: 1 in x direction is equal to \~4.8pt, for example.
+The `pin` and `offset` arrays can further contain an alignment as a third parameter.
+For example, `top+left` would make the arrow start or end at that corner of the letter.
+
+The pinning functionality is tuned for this template: changing the font or other parts of the raw block geometry will result in the pins not fitting anymore---beware!
 
 = Wrapping text around figures
-
-This is not really a feature of this template, just a tutorial on using `meander`#footnote[https://typst.app/universe/package/meander] for what I found useful in my documents.
-
 
 #meander.reflow(placement: box, {
   import meander: *
 
-  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 4mm), block(width: 30%)[
+  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 2mm), block(width: 30%)[
     #figure(
       rect(),
       caption: [A rectangle. The figure caption wraps thanks to the fixed width.]
@@ -135,6 +139,8 @@ This is not really a feature of this template, just a tutorial on using `meander
   container()
 
   content[
+    This is not really a feature of this template, just a tutorial on using `meander`#footnote[https://typst.app/universe/package/meander] for what I found useful in my documents.
+
     The default mode of Meander is managing a whole page; I found myself usually wanting to manage small groups of paragraphs that contain a figure---like @fig:rect.
     To do so, use `placement: box` when calling `meander.reflow()`.
     This will cause Meander to actually reserve the necessary space, so that subsequent regular layout only continues after Meander's content (this is not necessary when Meander manages a whole page anyway).
@@ -148,13 +154,10 @@ It means that the text may be slightly narrower than necessary to fit the figure
 
 == Wrapping text over pagebreaks
 
-One final trick with `meander` is using multiple containers when the wrapping content overflows a page.
-Here's an example of that:
-
 #meander.reflow(placement: box, {
   import meander: *
 
-  container(height: 1.5cm)
+  container(height: 1.3cm)
   pagebreak()
 
   placed(top+right, boundary: contour.margin(left: 4mm, bottom: 3mm), block(width: 30%)[
@@ -167,10 +170,8 @@ Here's an example of that:
   container()
 
   content[
-    A paragraph starts on this page.
-    It is pretty long, infact so long that it goes on until the next page.
-    _#lorem(40)_
-
+    One final trick with `meander` is using multiple containers when the wrapping content overflows a page.
+    This is an example of that: the paragraph starts on this page, but flows down onto the next one.
     We also want @fig:rect2 to wrap around that paragraph, appearing at the top of the new page.
     We can't just _not_ make the first paragraph part of the `meander.reflow()` call, since then the figure wouldn't be at the top of the page, but we also can't have all content in a single Meander `container()`.
 

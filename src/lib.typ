@@ -162,30 +162,86 @@
 
 #let pinit-code-from(
   color: blue,
-  pin: (0.5, 0),
-  offset: (5, 0),
-  body: (0.5, 0),
+  pin: (0, 0, right),
+  offset: (5, 0, left),
+  body: (0.3, 0),
+  looseness: 3pt,
+  width: auto,
   ..args,
   bod,
 ) = {
-  let scale = (4.7pt, 13.7pt)
-  let resolve(name, scale, offset, value) = {
-    let (dx, dy) = array.zip(scale, offset, value).map(((scale, offset, value)) => value * scale + offset)
+  // Computes a linear combination of the form `a*A+b*B+c*C`.
+  // All a, b, c must be numbers or arrays and all A, B, C arrays where the arrays all have the same length.
+  // When the first ("lowercase") parameter in a pair is an array, it is pairwise multiplied with the second array.
+  // The return value is an array of the same length.
+  // For example, to compute `A-B`, use `lin(1, A, -1, B)`
+  let lin(..args) = {
+    assert.eq(args.named(), (:), message: "no named arguments allowed")
+    assert(
+      args.pos().len() > 0 and calc.even(args.pos().len()),
+      message: "number of arguments must be even and nonzero",
+    )
+    let pairs = args.pos().chunks(2)
+    assert(
+      pairs.all(((a, b)) => type(a) in (int, float, array) and type(b) == array),
+      message: "all pairs must contain a number or array, and an array",
+    )
+    let len = pairs.first().last().len()
+    assert(
+      pairs.all(((a, b)) => (type(a) != array or a.len() == len) and b.len() == len),
+      message: "all arrays must match in length",
+    )
+
+    range(len).map(i => pairs.map(((a, b)) => if type(a) == array { a.at(i) } else { a } * b.at(i)).sum())
+  }
+
+  let dx-dy(name, values) = {
+    let (dx, dy) = values
     (name + "-dx": dx, name + "-dy": dy)
   }
 
+  let align-offset(def) = {
+    let value = def.at(2, default: center)
+    let values = (-looseness, 0pt, 0pt, looseness)
+    (
+      values.at((left, none, center, right).position(x => x == value.x)),
+      values.at((top, none, horizon, bottom).position(x => x == value.y)),
+    )
+  }
+
+  let dims = (
+    // how much to move from pinit's pin coordinate to arrive at the center of the anchoring monospace letter
+    // how much to shift to get from one monospace character to the next
+    grid-cell: (4.77pt, 13.62pt),
+    // how big a character actually is;
+    // pinit's pin coordinate needs to be offset by -character/2 to find the center of the character,
+    // and arrows are drawn around bounds defined by these dimensions
+    character: (4.77pt, 5.8pt),
+  )
 
   pinit.pinit-point-from(
-    ..resolve("pin", scale, (0pt, -3pt), pin),
-    ..resolve("offset", scale, (1pt, -3pt), offset),
-    ..resolve("body", scale, (1pt, -4pt), body),
+    ..dx-dy("pin", lin(
+      -1/2, dims.character,
+      pin.slice(0, 2), dims.grid-cell,
+      1, align-offset(pin),
+    )),
+    ..dx-dy("offset", lin(
+      -1/2, dims.character,
+      offset.slice(0, 2), dims.grid-cell,
+      1, align-offset(offset),
+    )),
+    ..dx-dy("body", lin(
+      -1/2, dims.character,
+      body, dims.grid-cell,
+      -1, align-offset(offset),
+    )),
     fill: color,
     thickness: 0.8pt,
     ..args,
-    {
+    block(width: width, {
       set text(0.85em, color)
       set par(leading: 0.75em)
       bod
-    }
+    })
   )
 }
