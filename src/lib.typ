@@ -1,14 +1,41 @@
 #import "libs.typ": ccicons, showybox.showybox, zebraw.zebraw, zebraw.zebraw-init, meander, pinit
 
-#let no-zebra(body) = zebraw(
-  background-color: luma(255).transparentize(100%),
-  inset: (top: 0.34em, bottom: 0.34em),
-  numbering: false,
-  body,
-)
+#let _zebraw = zebraw
 
-#let zebraw = (..args, body) => {
-  show: zebraw.with(
+/// A wrapper around `zebraw.zebraw()` that applies a few extra settings that would otherwise reset
+/// when calling `zebraw()` again (e.g. for setting the range of displayed lines)
+///
+/// #example(
+///   mode: "markup",
+///   scale-preview: 100%,
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   ```typ
+///   as
+///   df
+///   ```
+///   Only line 2, same styles:
+///   #{
+///     show: zebraw.with(line-range: lines("2"))
+///     ```typ
+///     as
+///     df
+///     ```
+///   }
+///   ````
+/// )
+///
+/// -> content
+#let zebraw(
+  /// any custom zebraw arguments
+  /// -> arguments
+  ..args,
+  /// the content that should be styled
+  /// -> content
+  body,
+) = {
+  show: _zebraw.with(
     // smart-skip: true,
     // skip-text: [#"    ..."],
     ..args
@@ -24,6 +51,75 @@
   body
 }
 
+/// Manually resets the raw code display settings configured by @@zebraw().
+///
+/// #example(
+///   mode: "markup",
+///   scale-preview: 100%,
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   ```typ
+///   as
+///   df
+///   ```
+///   Don't use styled code blocks:
+///   #no-zebraw[
+///     ```typ
+///     as
+///     df
+///     ```
+///   ]
+///   >>> #v(2pt)
+///   ````
+/// )
+///
+/// -> content
+#let no-zebraw(
+  /// the content that should be styled
+  /// -> content
+  body,
+) = _zebraw(
+  background-color: luma(255).transparentize(100%),
+  inset: (top: 0.34em, bottom: 0.34em),
+  numbering: false,
+  body,
+)
+
+/// Helper function for specifying zebraw line numbers.
+/// It converts a string of the form `"2-4"` into the array `(2, 5)`:
+/// lower bound inclusive, upper bound exclusive line range.
+///
+/// Note the line numbers in this example:
+///
+/// #example(
+///   mode: "markup",
+///   scale-preview: 100%,
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   >>>
+///   >>> #let code = ```typ
+///   >>>   a
+///   >>>   b
+///   >>>   c
+///   >>>   d
+///   >>>   e
+///   >>>   f
+///   >>>   g
+///   >>> ```
+///   >>>
+///   #zebraw(line-range: lines("2-4"))[
+///   >>>   #code
+///   <<<  ```typ
+///   <<<  ...
+///   <<<  ```
+///   ]
+///   >>> #v(2pt)
+///   ````
+/// )
+///
+/// -> array
 #let lines(spec) = {
   assert("," not in spec, message: "separate ranges are not yet supported")
   spec.split(",").map(part => {
@@ -45,6 +141,31 @@
   .first()
 }
 
+/// A dictionary of links to various Creative Commons licenses.
+/// Each link is displayed using `ccicons`.
+///
+/// #example(
+///   mode: "markup",
+///   scale-preview: 100%,
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: zebraw
+///   >>> #show: zebraw-init.with(
+///   >>>   extend: false,  // hide empty headers and footers
+///   >>>   lang: false,  // hide language tag, I don't like the style
+///   >>>   background-color: (luma(255), luma(245)),
+///   >>>   inset: (top: 0.48em, bottom: 0.48em),
+///   >>>   // highlight-color: blue.lighten(90%),
+///   >>>   // comment-color: blue.lighten(93%),
+///   >>> )
+///   >>>
+///   #licenses.cc-by-4-0 ---
+///   #licenses.cc-by-nc-sa-4-0 ---
+///   #licenses.cc-zero-1-0
+///   ````
+/// )
+///
+/// -> dictionary
 #let licenses = {
   let cc-link(category, name, version, body) = link(
     "https://creativecommons.org/" + category + "/" + name + "/" + version + "/",
@@ -63,13 +184,35 @@
   )
 }
 
+/// The main template function. Your document will generally start with
+/// ```typ
+/// #set document(..)  // title etc.
+/// #show: template(..)
+/// ```
+/// which it already does after initializing the template.
+///
+/// -> function
 #let template(
+  /// The license to show in the footer (by default)
+  /// -> content
   license: none,
+  /// The content for the left header column; empty by default
+  /// -> content | auto
   header-left: auto,
+  /// The content for the center header column; contains the title by default
+  /// -> content | auto
   header-center: auto,
+  /// The content for the right header column; contains a date-based version number by default
+  /// -> content | auto
   header-right: auto,
+  /// The content for the left footer column; contains copyright information by default
+  /// -> content | auto
   footer-left: auto,
+  /// The content for the center footer column; contains the page number and count by default
+  /// -> content | auto
   footer-center: auto,
+  /// The content for the right footer column; empty by default
+  /// -> content | auto
   footer-right: auto,
 ) = doc => {
   show: zebraw
@@ -143,7 +286,34 @@
   doc
 }
 
-#let colorbox(body, color: green, ..args) = {
+/// A colored box powered by `showybox`.
+///
+/// #example(
+///   mode: "markup",
+///   scale-preview: 100%,
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   #grid(columns: 2,
+///     colorbox[foo],
+///     colorbox(color: red)[bar],
+///   )
+///   >>> #v(2pt)
+///   ````
+/// )
+///
+/// -> dictionary
+#let colorbox(
+  /// the content that should be displayed
+  /// -> content
+  body,
+  /// the color to base border and background on
+  /// -> color
+  color: green,
+  /// any custom showybox arguments
+  /// -> arguments
+  ..args,
+) = {
   set align(center)
   showybox(
     frame: (
@@ -158,8 +328,54 @@
   )
 }
 
-#let pin = pinit.pin
-
+/// A wrapper around `pinit.pinit-point-from()`.
+/// It handles placing the note differently, based on a raster aligned to the raw code block.
+/// Pins inside the raw block are automatically set when a string of the form `PINn` (where `n` is a
+/// number) appears in the code, and `pinit-code-from()` can then refer to it.
+///
+/// // proper #example() doesn't work due to nonconvergence :(
+/// // tidy measures and lays out the preview,
+/// // and pinit depends on the allocated space
+/// #simple-example(
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   >>>
+///   ```typ
+///   as    v- the note starts 5 monospace
+///   dfPIN1             chars over by default
+///     ^^^^-- the arrow takes up 4 chars
+///            by default
+///   ```
+///   #pinit-code-from(1)[here]
+///   >>>
+///   >>> (The monospace grid alignment is more exact when using the template's fonts instead of the
+///   >>> manuals'.)
+///   ````,
+/// )
+///
+/// #simple-example(
+///   ````typ
+///   >>> #import tgm-hit-sew-lecture: *
+///   >>> #show: fake-template()
+///   >>>
+///   ```typ
+///   as
+///   dfPIN2
+///   gh
+///   ```
+///   #pinit-code-from(2,
+///     pin: (0, 0, top+right),
+///     offset: (5, -1, left),
+///     width: 70%,
+///   )[The anchor can be offset from the char
+///     it's at. Automatic line breaking is
+///     possible with `width`.]
+///   >>> #v(2pt)
+///   ````,
+/// )
+///
+/// -> content
 #let pinit-code-from(
   color: blue,
   pin: (0, 0, right),
@@ -240,7 +456,7 @@
     ..args,
     block(width: width, {
       set text(0.85em, color)
-      set par(leading: 0.75em)
+      set par(leading: 0.75em, justify: false)
       bod
     })
   )

@@ -4,6 +4,7 @@
 #import "@preview/tidy:0.4.3"
 #import "@preview/codly:1.3.0"
 #import "@preview/t4t:0.4.2"
+#import "@preview/crudo:0.1.1"
 
 #import "man-style.typ"
 
@@ -204,5 +205,25 @@
       set align(left)
       body
     })
+  )
+}
+
+#let simple-example(code) = {
+  let code-to-show = crudo.filter(code, line => not line.starts-with(">>>"))
+  let code-to-show = crudo.map(code-to-show, line => line.trim("<<<", at: start))
+  let code-to-run = crudo.filter(code, line => not line.starts-with("<<<"))
+  let code-to-run = crudo.map(code-to-run, line => line.trim(">>>", at: start))
+  grid(
+    columns: (1fr, 1fr),
+    gutter: 5pt,
+    man-style.code-block({
+      set text(size: .9em)
+      code-to-show
+    }),
+    man-style.preview-block(in-raw: false, {
+      show: box.with(width: 100%, inset: 10pt)
+      let mode = ("typ": "markup", "typc": "code", "typm": "math").at(code-to-run.lang)
+      context eval(code-to-run.text, mode: mode, scope: eval-scope())
+    }),
   )
 }

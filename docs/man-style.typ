@@ -157,6 +157,16 @@
   )
 }
 
+#let code-block(body, ..args) = {
+  import "template.typ": t4t
+  // counteract the raw font size decrease of the template being applied twice
+  set text(size: 1em/0.9)
+  t4t.assert.no-pos(args)
+  let args = args.named()
+  _ = args.remove("inset", default: none)
+  block(pad(x: -4.3%, body), ..args)
+}
+
 #let preview-block(body, no-codly: true, in-raw: true, ..args) = {
   import "template.typ": codly
 
@@ -174,18 +184,11 @@
 }
 
 #let layout-example(..args) = {
-  import "template.typ": tidy, t4t
+  import "template.typ": tidy
   import tidy.show-example as example
 
   example.default-layout-example(
-    code-block: (body, ..args) => {
-      // counteract the raw font size decrease of the template being applied twice
-      set text(size: 1em/0.9)
-      t4t.assert.no-pos(args)
-      let args = args.named()
-      _ = args.remove("inset", default: none)
-      block(pad(x: -4.3%, body), ..args)
-    },
+    code-block: code-block,
     preview-block: preview-block,
     ..args,
   )
