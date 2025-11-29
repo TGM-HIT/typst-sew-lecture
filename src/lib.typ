@@ -214,6 +214,10 @@
   /// The content for the right footer column; empty by default
   /// -> content | auto
   footer-right: auto,
+  /// The main font to use; note that even though this can be configured, some measurements,
+  /// particularly those used by @@pinit-code-from(), may be wrong if you change it.
+  /// -> string
+  font: "Noto Sans",
 ) = doc => {
   show: zebraw
   show: zebraw-init.with(
@@ -227,7 +231,7 @@
 
   show raw.where(block: true): set text(0.9em)
 
-  set text(font: "Noto Sans", hyphenate: true)
+  set text(font: font)
   set par(justify: true)
   show link: it => {
     if type(it.dest) == str {

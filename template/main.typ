@@ -14,6 +14,7 @@
   header-center: [Template],
   footer-right: [TGM-HIT],
   license: licenses.cc-by-4-0,
+  // font: "Noto Sans",
 )
 
 // the bibliography is not shown, but you can cite from it (chicago-notes is a footnote style)
@@ -121,6 +122,7 @@ The `pin-code-from` function works a bit differently from `pinit`'s `pinit-point
 The distances are specified in terms of the monospace font grid: 1 in x direction is equal to \~4.8pt, for example.
 The `pin` and `offset` arrays can further contain an alignment as a third parameter.
 For example, `top+left` would make the arrow start or end at that corner of the letter.
+More details can be found in the manual.
 
 The pinning functionality is tuned for this template: changing the font or other parts of the raw block geometry will result in the pins not fitting anymore---beware!
 
@@ -160,7 +162,7 @@ It means that the text may be slightly narrower than necessary to fit the figure
   container(height: 1.3cm)
   pagebreak()
 
-  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 3mm), block(width: 30%)[
+  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 4mm), block(width: 30%)[
     #figure(
       rect(),
       caption: [Another rectangle, at the to of the page.]
@@ -173,6 +175,7 @@ It means that the text may be slightly narrower than necessary to fit the figure
     One final trick with `meander` is using multiple containers when the wrapping content overflows a page.
     This is an example of that: the paragraph starts on this page, but flows down onto the next one.
     We also want @fig:rect2 to wrap around that paragraph, appearing at the top of the new page.
+
     We can't just _not_ make the first paragraph part of the `meander.reflow()` call, since then the figure wouldn't be at the top of the page, but we also can't have all content in a single Meander `container()`.
 
     However, meander allows multiple containers with explicit pagebreaks in between, and the content will flow between these!
@@ -188,20 +191,25 @@ If you want to specify a license, you would usually use it when calling the temp
 This document itself is CC-BY, but under normal circumstances (replacing the text with your own material) that license will not apply to you.
 The scaffolding alone (calling `set document()` etc.) is too trivial to entail copyright.
 
-= Header and footer customization
+= Customization
 
-Both header and footer are divided into three equal-width parts; some of them have default values:
+Some customization knobs are provided, but feel free to fork this template (MIT licensed) if you need more freedom.
 
-- header center: defaults to the document title
-- header right: defaults to a date-based version number
-- footer left: defaults to a copyright note including author, year and license
-- footer center: defaults to the page number
-- the other two are empty
+== Font
 
-The template further overrides these defaults:
+The template uses Not Sans by default.
+Changing the font is supported, but the code note feature may be impacted:
+the `pinit-code-from()` function configures line spacing that makes multiline notes line up with code lines.
+The used measurements would need to change, which is only supported via forking.
+Likewise, changing the raw font via `show raw: set text(..)` will mess up the monospace grid measurements that `pin-code-from()` is based on.
 
-- header left: a course/audience description
-- header center: a short version of the title
-- footer right: the institution's name
+== Header & footer
+
+Both header and footer are divided into three equal-width parts;
+some of them have default values which you can find in the manual.
+The template further overrides some of these defaults, so that the outcome is this:
+
+- Header: course/audience description; short version of the title; date-based version number
+- Footer: copyright note including author, year and license; page number; institution
 
 You are of course free to use any other header/footer content you like.
