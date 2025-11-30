@@ -73,7 +73,7 @@ You can also select a subset of lines, as these two examples show:
   }
   ```,
   {
-    show: zebraw.with(line-range: lines("2-4"))
+    show: zebraw.with(line-range: lines("1-2, 4, 5"))
     ```java
     public class Main {
       public static void main(String[] args){
@@ -85,27 +85,7 @@ You can also select a subset of lines, as these two examples show:
 )
 
 `zebraw` specifies ranges in $["lower", "upper")$ form (i.e. half-open as usual in programming).
-To make this more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
-Only strings like `"2-4"` will work for now.
-If you want to use disjoint ranges right now, install the development branches of this template and `zebraw`,
-e.g. using `typship`#footnote[https://github.com/sjfhsjfh/typship]:
-
-#zebraw(
-  numbering: false,
-  ```sh
-  typship download https://github.com/TGM-HIT/typst-sew-lecture -c zebraw-next
-  typship download https://github.com/SillyFreak/typst-zebraw -c issue/multiple-range
-  ```
-)
-
-You would then import the template from the `@local` namespace:
-
-#zebraw(
-  numbering: false,
-  ```typ
-  #import "@local/tgm-hit-sew-lecture:0.1.0
-  ```
-)
+To make this more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges.
 
 == Notes in code
 
