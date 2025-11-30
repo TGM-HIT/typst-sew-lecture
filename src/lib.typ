@@ -36,8 +36,8 @@
   body,
 ) = {
   show: _zebraw.with(
-    // smart-skip: true,
-    // skip-text: [#"    ..."],
+    smart-skip: true,
+    skip-text: [#"    ..."],
     ..args
   )
   show raw.where(block: true): block.with(

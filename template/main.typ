@@ -72,7 +72,7 @@ You can also select a subset of lines, as these two examples show:
   }
   ```,
   {
-    show: zebraw.with(line-range: lines("2-4"))
+    show: zebraw.with(line-range: lines("1-2, 4, 5"))
     ```java
     public class Main {
       public static void main(String[] args){
@@ -84,8 +84,7 @@ You can also select a subset of lines, as these two examples show:
 )
 
 `zebraw` specifies ranges in $["lower", "upper")$ form (i.e. half-open as usual in programming).
-To make this a bit more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple disjoint ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
-Only strings like `"2-4"` will work for now.
+To make this a bit more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges.
 
 == Notes in code
 
