@@ -146,13 +146,13 @@ The pinning functionality is tuned for this template: changing the font or other
     The default mode of Meander is managing a whole page; I found myself usually wanting to manage small groups of paragraphs that contain a figure---like @fig:rect.
     To do so, use `placement: box` when calling `meander.reflow()`.
     This will cause Meander to actually reserve the necessary space, so that subsequent regular layout only continues after Meander's content (this is not necessary when Meander manages a whole page anyway).
+
+    Another useful parameter is `placed(boundary: contour.margin(..), ..)`.
+    The `boundary` defines how text should avoid the placed figure, and `contour.margin()` is a simple such boundary that adds a bit of space around your figure.
+    Finally, I like to put my figures into fixed-width `block()`s.
+    It means that the text may be slightly narrower than necessary to fit the figure, but it makes the layout more robust when writing long figure captions.
   ]
 })
-
-Another useful parameter is `placed(boundary: contour.margin(..), ..)`.
-The `boundary` defines how text should avoid the placed figure, and `contour.margin()` is a simple such boundary that adds a bit of space around your figure.
-Finally, I like to put my figures into fixed-width `block()`s.
-It means that the text may be slightly narrower than necessary to fit the figure, but it makes the layout more robust when writing long figure captions.
 
 == Wrapping text over pagebreaks
 
@@ -185,7 +185,7 @@ It means that the text may be slightly narrower than necessary to fit the figure
 
 = License
 
-The `licenses` dictionary contains links to various creative commons licenses, displayed as the corresponding icon (powered by `ccicons`#footnote[https://typst.app/universe/package/ccicons]): #licenses.cc-by-sa-4-0 or #licenses.cc-zero-1-0.
+The `licenses` dictionary contains clickable links to various creative commons licenses, displayed as the corresponding icon (powered by `ccicons`#footnote[https://typst.app/universe/package/ccicons]): #licenses.cc-by-sa-4-0 or #licenses.cc-zero-1-0.
 If you want to specify a license, you would usually use it when calling the template, then it will be shown in the footer by default.
 
 This document itself is CC-BY, but under normal circumstances (replacing the text with your own material) that license will not apply to you.
@@ -197,7 +197,7 @@ Some customization knobs are provided, but feel free to fork this template (MIT 
 
 == Font
 
-The template uses Not Sans by default.
+The template uses Noto Sans by default.
 Changing the font is supported, but the code note feature may be impacted:
 the `pinit-code-from()` function configures line spacing that makes multiline notes line up with code lines.
 The used measurements would need to change, which is only supported via forking.
