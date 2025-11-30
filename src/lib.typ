@@ -121,8 +121,7 @@
 ///
 /// -> array
 #let lines(spec) = {
-  assert("," not in spec, message: "separate ranges are not yet supported")
-  spec.split(",").map(part => {
+  let result = spec.split(",").map(part => {
     let bounds = part.split("-").map(str.trim)
     if bounds.len() == 1 and bounds.first() != "" {
       // a single page
@@ -138,7 +137,8 @@
       panic("invalid page range: " + spec)
     }
   })
-  .first()
+  if result.len() == 1 { result.first() }
+  else { result }
 }
 
 /// A dictionary of links to various Creative Commons licenses.
