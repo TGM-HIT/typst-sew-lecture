@@ -22,8 +22,9 @@
 
 #title()
 
-#place(hide(footnote(numbering: "*")[Based on earlier work by Jane Doe (comment out otherwise)]))
-#counter(footnote).update(i => i - 1)
+// useful to give attribution if this is an adaptation
+// #place(hide(footnote(numbering: "*")[Based on earlier work by Jane Doe]))
+// #counter(footnote).update(i => i - 1)
 
 This template is intended to simplify crafting well-presented learning resources for our software engineering students.
 The examples here are meant to be read along with the document's source code, e.g. in the web app or using Tinymist's preview.
@@ -84,8 +85,16 @@ You can also select a subset of lines, as these two examples show:
 )
 
 `zebraw` specifies ranges in $["lower", "upper")$ form (i.e. half-open as usual in programming).
-To make this a bit more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple disjoint ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
+To make this more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
 Only strings like `"2-4"` will work for now.
+If you want to use disjoint ranges right now, install the development branches of this template and `zebraw`,
+e.g. using `typship`#footnote[https://github.com/sjfhsjfh/typship].
+You would then #{show "@local": strong; `#import "@local/tgm-hit-sew-lecture:0.0.1`}:
+
+```sh
+typship download https://github.com/TGM-HIT/typst-sew-lecture -c zebraw-next
+typship download https://github.com/SillyFreak/typst-zebraw -c issue/multiple-range
+```
 
 == Notes in code
 
