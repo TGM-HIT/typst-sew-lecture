@@ -383,9 +383,9 @@
 #let pinit-code-from(
   color: blue,
   pin: (0, 0, right),
-  offset: (5, 0, left),
+  offset: (6, 0, left),
   body: (0.3, 0),
-  looseness: 3pt,
+  looseness: 4pt,
   width: auto,
   ..args,
   bod,
