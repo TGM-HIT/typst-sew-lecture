@@ -26,11 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.1.0] - 2025-01-01
+## [0.1.0] - 2025-12-02
 
-### Added
-
-- ...
+- Initial version with showybox and pinit wrappers, and usage explanations
 
 
 [Unreleased]: https://github.com/TGM-HIT/typst-sew-lecture/compare/v0.1.0...HEAD

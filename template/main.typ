@@ -1,4 +1,4 @@
-#import "@preview/tgm-hit-sew-lecture:0.0.1": *
+#import "@preview/tgm-hit-sew-lecture:0.1.0": *
 
 // #set text(lang: "de")
 #set document(
@@ -89,7 +89,7 @@ To make this more convenient, the `lines()` function accepts strings like `"2-4,
 Only strings like `"2-4"` will work for now.
 If you want to use disjoint ranges right now, install the development branches of this template and `zebraw`,
 e.g. using `typship`#footnote[https://github.com/sjfhsjfh/typship].
-You would then #{show "@local": strong; `#import "@local/tgm-hit-sew-lecture:0.0.1`}:
+You would then #{show "@local": strong; `#import "@local/tgm-hit-sew-lecture:0.1.0`}:
 
 ```sh
 typship download https://github.com/TGM-HIT/typst-sew-lecture -c zebraw-next

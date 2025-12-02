@@ -21,8 +21,7 @@
 #show: manual(
   package-meta: toml("/typst.toml").package,
   title: [TGM-HIT SEW Lecture],
-  date: none,
-  // date: datetime(year: ..., month: ..., day: ...),
+  date: datetime(year: 2025, month: 12, day: 2),
 
   // logo: rect(width: 5cm, height: 5cm),
   // abstract: [
