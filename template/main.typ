@@ -183,19 +183,24 @@ The pinning functionality is tuned for this template: changing the font or other
   content[
     One final trick with `meander` is using multiple containers when the wrapping content overflows a page.
     This is an example of that: the paragraph starts on this page, but flows down onto the next one.
-    We also want @fig:rect2 to wrap around that paragraph, appearing at the top of the new page.
+    We also want @fig:rect2 to wrap around that paragraph, to appear at the top of the new page.
 
     We can't just _not_ make the first paragraph part of the `meander.reflow()` call, since then the figure wouldn't be at the top of the page, but we also can't have all content in a single Meander `container()`.
 
     However, meander allows multiple containers with explicit pagebreaks in between, and the content will flow between these!
-    It's not fully automatic---you have to specify the height of the first container, i.e. how much space is left on the page---but it can achieve this layout.
+    It's not fully automatic---you have to specify the space left on the page as the height of the first container---but it can achieve this layout.
   ]
 })
 
+= Bibliography
+
+This template uses the "chicago-notes" bibliography style.
+The bibiliography itself is not rendered, but you can still add citations, like here@arrgh, and will get a footnote.
+
 = License
 
-The `licenses` dictionary contains clickable links to various creative commons licenses, displayed as the corresponding icon (powered by `ccicons`#footnote[https://typst.app/universe/package/ccicons]): #licenses.cc-by-sa-4-0 or #licenses.cc-zero-1-0.
-If you want to specify a license, you would usually use it when calling the template, then it will be shown in the footer by default.
+The `licenses` dictionary contains clickable links to various creative commons licenses, displayed as the corresponding icon (powered by `ccicons`#footnote[https://typst.app/universe/package/ccicons]): #licenses.cc-by-sa-4-0, #licenses.cc-zero-1-0.
+If you specify a license through the template, it will be shown in the footer by default.
 
 This document itself is CC-BY, but under normal circumstances (replacing the text with your own material) that license will not apply to you.
 The scaffolding alone (calling `set document()` etc.) is too trivial to entail copyright.
