@@ -1,4 +1,4 @@
-#import "@preview/tgm-hit-sew-lecture:0.0.1": *
+#import "@preview/tgm-hit-sew-lecture:0.1.0": *
 
 // #set text(lang: "de")
 #set document(

@@ -346,9 +346,9 @@
 ///   >>> #show: fake-template()
 ///   >>>
 ///   ```typ
-///   as    v- the note starts 5 monospace
-///   dfPIN1             chars over by default
-///     ^^^^-- the arrow takes up 4 chars
+///   as     v- the note starts 6 monospace
+///   dfPIN1              chars over by default
+///     ^^^^^--- the arrow takes up 5 chars
 ///            by default
 ///   ```
 ///   #pinit-code-from(1)[here]

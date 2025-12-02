@@ -14,4 +14,4 @@ typst init @preview/tgm-hit-sew-lecture
 
 ## Usage
 
-The template ([rendered PDF](example.pdf)) contains usage examples (in German) as example content. If you are looking for the details of this template package's function, take a look at the [manual](docs/manual.pdf).
+The template ([rendered PDF](example.pdf)) contains usage examples as example content. If you are looking for the details of this template package's function, take a look at the [manual](docs/manual.pdf).
