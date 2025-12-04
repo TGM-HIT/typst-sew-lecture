@@ -88,13 +88,24 @@ You can also select a subset of lines, as these two examples show:
 To make this more convenient, the `lines()` function accepts strings like `"2-4, 6, 9-11"` that produces the appropriate ranges---but note that multiple ranges are not supported until pull request #link("https://github.com/hongjr03/typst-zebraw/pull/32")[typst-zebraw\#32] lands.
 Only strings like `"2-4"` will work for now.
 If you want to use disjoint ranges right now, install the development branches of this template and `zebraw`,
-e.g. using `typship`#footnote[https://github.com/sjfhsjfh/typship].
-You would then #{show "@local": strong; `#import "@local/tgm-hit-sew-lecture:0.1.0`}:
+e.g. using `typship`#footnote[https://github.com/sjfhsjfh/typship]:
 
-```sh
-typship download https://github.com/TGM-HIT/typst-sew-lecture -c zebraw-next
-typship download https://github.com/SillyFreak/typst-zebraw -c issue/multiple-range
-```
+#zebraw(
+  numbering: false,
+  ```sh
+  typship download https://github.com/TGM-HIT/typst-sew-lecture -c zebraw-next
+  typship download https://github.com/SillyFreak/typst-zebraw -c issue/multiple-range
+  ```
+)
+
+You would then import the template from the `@local` namespace:
+
+#zebraw(
+  numbering: false,
+  ```typ
+  #import "@local/tgm-hit-sew-lecture:0.1.0
+  ```
+)
 
 == Notes in code
 
@@ -137,10 +148,13 @@ The pinning functionality is tuned for this template: changing the font or other
 
 = Wrapping text around figures
 
-#meander.reflow(placement: box, {
+This is not really a feature of this template, just a tutorial on using `meander`#footnote[https://typst.app/universe/package/meander] for what I found useful in my documents.
+
+
+#meander.reflow({
   import meander: *
 
-  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 2mm), block(width: 30%)[
+  placed(top+right, boundary: contour.margin(left: 4mm, bottom: 4mm), block(width: 30%)[
     #figure(
       rect(),
       caption: [A rectangle. The figure caption wraps thanks to the fixed width.]
@@ -150,22 +164,16 @@ The pinning functionality is tuned for this template: changing the font or other
   container()
 
   content[
-    This is not really a feature of this template, just a tutorial on using `meander`#footnote[https://typst.app/universe/package/meander] for what I found useful in my documents.
-
-    The default mode of Meander is managing a whole page; I found myself usually wanting to manage small groups of paragraphs that contain a figure---like @fig:rect.
-    To do so, use `placement: box` when calling `meander.reflow()`.
-    This will cause Meander to actually reserve the necessary space, so that subsequent regular layout only continues after Meander's content (this is not necessary when Meander manages a whole page anyway).
-
-    Another useful parameter is `placed(boundary: contour.margin(..), ..)`.
+    A useful parameter for wrapping figures is `placed(boundary: contour.margin(..), ..)`.
     The `boundary` defines how text should avoid the placed figure, and `contour.margin()` is a simple such boundary that adds a bit of space around your figure.
-    Finally, I like to put my figures into fixed-width `block()`s.
+    I also like to put my figures into fixed-width `block()`s.
     It means that the text may be slightly narrower than necessary to fit the figure, but it makes the layout more robust when writing long figure captions.
   ]
 })
 
 == Wrapping text over pagebreaks
 
-#meander.reflow(placement: box, {
+#meander.reflow({
   import meander: *
 
   container(height: 1.3cm)

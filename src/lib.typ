@@ -219,18 +219,6 @@
   /// -> string
   font: "Noto Sans",
 ) = doc => {
-  show: zebraw
-  show: zebraw-init.with(
-    extend: false,  // hide empty headers and footers
-    lang: false,  // hide language tag, I don't like the style
-    background-color: (luma(255), luma(245)),
-    inset: (top: 0.48em, bottom: 0.48em),
-    // highlight-color: blue.lighten(90%),
-    // comment-color: blue.lighten(93%),
-  )
-
-  show raw.where(block: true): set text(0.9em)
-
   set text(font: font)
   set par(justify: true)
   show link: it => {
@@ -280,6 +268,18 @@
 
   set bibliography(style: "chicago-notes")
   show bibliography: none
+
+  show: zebraw
+  show: zebraw-init.with(
+    extend: false,  // hide empty headers and footers
+    lang: false,  // hide language tag, I don't like the style
+    background-color: (luma(255), luma(245)),
+    inset: (top: 0.48em, bottom: 0.48em),
+    // highlight-color: blue.lighten(90%),
+    // comment-color: blue.lighten(93%),
+  )
+
+  show raw.where(block: true): set text(0.9em)
 
   show quote.where(block: true): set block(spacing: 1.2em)
 
